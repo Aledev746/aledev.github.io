@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Retro terminal portfolio boot</title>
+  <meta name="description" content="Portfolio di Alessandro De Luca, studente di Ingegneria Informatica all'Università degli Studi di Palermo." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- TERMINAL BOOT OVERLAY -->
+  <div id="terminal-overlay">
+    <canvas id="scanline-canvas"></canvas>
+    <div id="terminal-window">
+      <div class="terminal-titlebar">
+        <span class="terminal-dot dot-red"></span>
+        <span class="terminal-dot dot-yellow"></span>
+        <span class="terminal-dot dot-green"></span>
+        <span class="terminal-titlebar-text">aledev@kali:~$ — zsh — 80×24</span>
+      </div>
+      <div class="terminal-body" id="terminal-body">
+        <div id="terminal-log"></div>
+        <div id="terminal-cursor-line">
+          <span class="t-prompt">aledev@kali:~$</span>
+          <span class="t-cursor" id="t-cursor">█</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="main-content" class="main-content hidden">
+
+    <!-- Orb canvas (main background for entire site) -->
+    <canvas id="orb-canvas"></canvas>
+    <!-- Film grain overlay -->
+    <canvas id="grain-canvas" aria-hidden="true"></canvas>
+
+    <!-- Scanline overlay (persists after boot) -->
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="noise-overlay" aria-hidden="true"></div>
+
+    <!-- NAVBAR -->
+    <nav id="navbar" class="navbar">
+      <div class="nav-container">
+        <a href="#home" class="nav-logo">
+          <span class="logo-bracket">&lt;</span>AleDev<span class="logo-slash">/</span><span class="logo-bracket">&gt;</span>
+        </a>
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#home" class="nav-link active" data-i18n="nav.home">Home</a></li>
+          <li><a href="#about" class="nav-link" data-i18n="nav.about">About</a></li>
+          <li><a href="#skills" class="nav-link" data-i18n="nav.skills">Skills</a></li>
+          <li><a href="#projects" class="nav-link" data-i18n="nav.projects">Projects</a></li>
+          <li><a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a></li>
+          <li><a href="#terminal" id="nav-terminal" class="nav-link" style="color: var(--neon-green); font-family: var(--mono);">>_Terminal</a></li>
+        </ul>
+        <button id="hamburger" class="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="hero-section">
+
+      <!-- Hero text overlay -->
+      <div class="hero-overlay">
+        <p class="hero-greeting scroll-animate">
+          <span class="prompt-char">$</span> whoami
+        </p>
+        <h1 class="hero-name scroll-animate stagger-1">
+          <span class="glitch-text" data-text="Alessandro">Alessandro</span><br>
+          <span class="glitch-text name-alt" data-text="De Luca">De Luca</span>
+        </h1>
+        <p class="hero-subtitle scroll-animate stagger-2">
+          <span class="neon-green">&gt;</span>
+          <span class="type-effect" id="type-effect"></span><span class="blink-cursor">_</span>
+        </p>
+        <p class="hero-desc scroll-animate stagger-3" data-i18n-html="hero.desc">
+          Passionate about software development, cybersecurity and interactive design. I build digital experiences with clean code and creativity.
+        </p>
+        <div class="hero-buttons scroll-animate stagger-4">
+          <a href="#projects" class="btn btn-primary">
+            <span class="btn-bracket">[</span><span data-i18n="hero.btn.projects">View Projects</span><span class="btn-bracket">]</span>
+          </a>
+          <a href="#contact" class="btn btn-secondary" data-i18n="hero.btn.contact">Contact Me</a>
+          <a href="/cv.pdf" target="_blank" rel="noopener" class="btn btn-cv" data-i18n="hero.btn.cv">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-cv-icon"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download CV
+          </a>
+        </div>
+        <div class="hero-stats scroll-animate stagger-5">
+          <div class="hstat"><span class="hstat-n neon-green">2°</span><span class="hstat-l" data-i18n="hero.stat.year">Year</span></div>
+          <div class="hstat-divider"></div>
+          <div class="hstat"><span class="hstat-n neon-blue">6+</span><span class="hstat-l" data-i18n="hero.stat.langs">Languages</span></div>
+          <div class="hstat-divider"></div>
+          <div class="hstat"><span class="hstat-n neon-purple">3+</span><span class="hstat-l" data-i18n="hero.stat.projects">Projects</span></div>
+        </div>
+      </div>
+
+      <!-- Attribution -->
+      <div class="hero-attribution" aria-hidden="true">Art &amp; Design inspired by @scottclayton</div>
+
+      <div class="scroll-indicator">
+        <div class="mouse"><div class="wheel"></div></div>
+        <span>scroll</span>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="section">
+      <div class="container">
+        <h2 class="section-title scroll-animate">
+          <span class="section-number">01.</span> <span data-i18n="about.title">About Me</span>
+        </h2>
+        <div class="about-grid">
+          <div class="about-text scroll-animate stagger-1">
+            <p data-i18n-html="about.p1">I'm in my second year of <strong>Computer Engineering</strong> at the University of Palermo. I'm interested in software development, cybersecurity, and interactive design.</p>
+            <p data-i18n="about.p2">I love exploring the boundary between technology and design, creating experiences that blend functionality and visual impact. When I'm not writing code, I study software architectures and experiment with new frameworks.</p>
+            <div class="terminal-mini glass">
+              <div class="tm-header">
+                <span class="tm-dot"></span><span class="tm-dot"></span><span class="tm-dot"></span>
+                <span class="tm-title">status.sh</span>
+              </div>
+              <div class="tm-body">
+                <div class="tm-line"><span class="tm-key">STATUS</span> <span class="neon-green">■ Available for projects</span></div>
+                <div class="tm-line"><span class="tm-key">LOCATION</span> <span class="neon-blue">Palermo, IT</span></div>
+                <div class="tm-line"><span class="tm-key">FOCUS</span> <span class="neon-purple">Software Dev + Cybersec</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="about-card scroll-animate stagger-2">
+            <div class="info-card glass">
+              <h3 data-i18n="about.details">// Details</h3>
+              <ul class="info-list">
+                <li>
+                  <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1 4 3 6 3s6-2 6-3v-5"/></svg>
+                  <div><span class="info-label" data-i18n="about.uni.label">University</span><span class="info-value">UNIPA — Palermo</span></div>
+                </li>
+                <li>
+                  <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                  <div><span class="info-label" data-i18n="about.deg.label">Degree</span><span class="info-value" data-i18n="about.deg.value">Computer Engineering</span></div>
+                </li>
+                <li>
+                  <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <div><span class="info-label" data-i18n="about.city.label">City</span><span class="info-value" data-i18n="about.city.value">Palermo, Italy</span></div>
+                </li>
+                <li>
+                  <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  <div><span class="info-label">Focus</span><span class="info-value">Software Dev & Cybersecurity</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS SECTION -->
+    <section id="skills" class="section">
+      <div class="container">
+        <div class="section-header-centered scroll-animate">
+          <h2 class="section-title-centered">Tech Stack <span class="neon-green">&amp;</span> <span class="gradient-text">Expertise</span></h2>
+          <p class="section-subtitle">Technologies I work with to build amazing products</p>
+        </div>
+        <div class="tech-stack-grid scroll-animate stagger-1">
+          <div class="tech-card glass">
+            <div class="tech-icon-box"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="Python" class="tech-icon-svg"></div>
+            <span class="tech-name">Python</span>
+          </div>
+          <div class="tech-card glass">
+            <div class="tech-icon-box"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" alt="HTML5" class="tech-icon-svg"></div>
+            <span class="tech-name">HTML</span>
+          </div>
+          <div class="tech-card glass">
+            <div class="tech-icon-box"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" alt="CSS3" class="tech-icon-svg"></div>
+            <span class="tech-name">CSS</span>
+          </div>
+          <div class="tech-card glass">
+            <div class="tech-icon-box"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linux/linux-original.svg" alt="Linux" class="tech-icon-svg"></div>
+            <span class="tech-name">Linux</span>
+          </div>
+          <div class="tech-card glass">
+            <div class="tech-icon-box"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" alt="MySQL" class="tech-icon-svg"></div>
+            <span class="tech-name">MySQL</span>
+          </div>
+          <div class="tech-card glass">
+            <div class="tech-icon-box"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" alt="Java" class="tech-icon-svg"></div>
+            <span class="tech-name">Java</span>
+          </div>
+          <div class="tech-card glass">
+            <div class="tech-icon-box"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/swift/swift-original.svg" alt="Swift" class="tech-icon-svg"></div>
+            <span class="tech-name">Swift</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects" class="section">
+      <div class="container">
+        <h2 class="section-title scroll-animate">
+          <span class="section-number">03.</span> <span data-i18n="projects.title">Projects</span>
+        </h2>
+        <div class="projects-grid" id="projects-grid">
+          <div class="projects-loading" id="projects-loading">
+            <div class="loading-spinner"></div>
+            <p data-i18n="projects.loading">// Loading repositories from GitHub...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="section">
+      <div class="container contact-container">
+        <h2 class="section-title scroll-animate">
+          <span class="section-number">04.</span> <span data-i18n="contact.title">Contact</span>
+        </h2>
+        <p class="contact-text scroll-animate stagger-1" data-i18n="contact.text">Have an interesting project or just want to chat? Don't hesitate to reach out!</p>
+
+        <!-- TERMINAL CONTACT FORM -->
+        <div class="contact-form-terminal scroll-animate stagger-2">
+          <div class="cft-titlebar">
+            <span class="cft-dot cft-dot--red"></span>
+            <span class="cft-dot cft-dot--yellow"></span>
+            <span class="cft-dot cft-dot--green"></span>
+            <span class="cft-titlebar-text">aledev@kali:~ $ send_message</span>
+          </div>
+          <div class="cft-separator"></div>
+          <form id="contact-form" class="cft-body" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <div class="cft-row">
+              <div class="cft-field">
+                <label class="cft-label" for="cf-name" data-i18n="form.name">NAME</label>
+                <input type="text" id="cf-name" name="name" class="cft-input" required autocomplete="name" data-i18n-placeholder="form.name.ph" placeholder="your name">
+              </div>
+              <div class="cft-field">
+                <label class="cft-label" for="cf-email" data-i18n="form.email">EMAIL</label>
+                <input type="email" id="cf-email" name="email" class="cft-input" required autocomplete="email" placeholder="your@email.com">
+              </div>
+            </div>
+            <div class="cft-field">
+              <label class="cft-label" for="cf-message" data-i18n="form.message">MESSAGE</label>
+              <textarea id="cf-message" name="message" class="cft-textarea" required rows="5" data-i18n-placeholder="form.message.ph" placeholder="Write your message..."></textarea>
+            </div>
+            <button type="submit" class="cft-submit" id="cft-submit-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="cft-submit-icon"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              <span data-i18n="form.send">SEND MESSAGE</span>
+            </button>
+          </form>
+          <div id="cft-success" class="cft-success" style="display:none;">
+            <span class="neon-green">✓</span> <span data-i18n="form.success">Message sent successfully!</span>
+          </div>
+        </div>
+
+        <!-- SOCIAL LINKS -->
+        <div class="contact-grid scroll-animate stagger-3">
+          <a href="https://github.com/Aledev746" target="_blank" rel="noopener" class="contact-card glass">
+            <svg viewBox="0 0 24 24" class="contact-icon"><path fill="currentColor" d="M12 .5C5.65.5.5 5.65.5 12c0 5.09 3.29 9.41 7.86 10.94.57.1.78-.25.78-.55v-1.93c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.7 1.25 3.36.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 015.78 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.84 1.18 3.1 0 4.43-2.7 5.41-5.27 5.69.42.36.79 1.06.79 2.14v3.17c0 .3.21.66.79.55A11.5 11.5 0 0023.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+            <span class="contact-label">GitHub</span>
+            <span class="contact-handle">@Aledev746</span>
+          </a>
+          <a href="https://www.linkedin.com/in/alessandro-de-luca-6978ab39b/" target="_blank" rel="noopener" class="contact-card glass">
+            <svg viewBox="0 0 24 24" class="contact-icon"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.95v5.66H9.34V9h3.41v1.56h.05a3.74 3.74 0 013.37-1.85c3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77A1.75 1.75 0 000 1.73v20.54A1.75 1.75 0 001.77 24h20.45A1.76 1.76 0 0024 22.27V1.73A1.76 1.76 0 0022.22 0z"/></svg>
+            <span class="contact-label">LinkedIn</span>
+            <span class="contact-handle" data-i18n="contact.connect">Connect</span>
+          </a>
+          <!--
+          <a href="https://x.com/" target="_blank" rel="noopener" class="contact-card glass">
+            <svg viewBox="0 0 24 24" class="contact-icon"><path fill="currentColor" d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.4l-5.8-7.57-6.63 7.57H.49l8.6-9.83L0 1.15h7.59l5.24 6.93 6.07-6.93zm-1.29 19.5h2.04L6.48 3.24H4.3l13.31 17.41z"/></svg>
+            <span class="contact-label">X / Twitter</span>
+            <span class="contact-handle" data-i18n="contact.follow">Follow me</span>
+          </a>
+          -->
+          <a href="https://www.instagram.com/__aledeluca_?igsh=c2xmeDh2b2tjdDcx&utm_source=qr" target="_blank" rel="noopener" class="contact-card glass">
+            <svg viewBox="0 0 24 24" class="contact-icon"><path fill="currentColor" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            <span class="contact-label">Instagram</span>
+            <span class="contact-handle" data-i18n="contact.follow">Follow me</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="container footer-content">
+        <p class="footer-year" data-i18n="footer.rights">© 2026 — All rights reserved</p>
+        <p class="footer-sig"><span class="neon-green">aledev@kali:~$</span> <span class="footer-blink">█</span></p>
+      </div>
+    </footer>
+
+  </div>
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="i18n.js"></script>
+  <script src="script.js"></script>
+  <script src="terminal.js"></script>
+</body>
+</html>
